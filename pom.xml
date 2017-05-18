@@ -1,0 +1,89 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+      <groupId>com.xhc.test</groupId>
+      <artifactId>test_parent</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  
+	<groupId>com.xhc.test</groupId>
+	<artifactId>test_sh</artifactId>
+	<packaging>war</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>test_sh</name>
+
+    <properties>
+        <com.xhc.test.version>0.0.1-SNAPSHOT</com.xhc.test.version>
+        <spring.version>4.3.8.RELEASE</spring.version>
+        <hibernate.version>5.2.10.Final</hibernate.version>
+    </properties>
+
+    <dependencies>
+  
+    <!-- spring -->
+	    <dependency>  
+		    <groupId>org.springframework</groupId>  
+		    <artifactId>spring-webmvc</artifactId>  
+		    <version>${spring.version}</version>  
+		</dependency>  
+		  
+		<dependency>  
+		    <groupId>org.springframework</groupId>  
+		    <artifactId>spring-jdbc</artifactId>  
+		    <version>${spring.version}</version>  
+		</dependency>  
+		  
+		<dependency>  
+		    <groupId>org.springframework</groupId>  
+		    <artifactId>spring-context</artifactId>  
+		    <version>${spring.version}</version>  
+		</dependency>  
+		  
+		<dependency>  
+		    <groupId>org.springframework</groupId>  
+		    <artifactId>spring-aop</artifactId>  
+		    <version>${spring.version}</version>  
+		</dependency>  
+		  
+		<dependency>  
+		    <groupId>org.springframework</groupId>  
+		    <artifactId>spring-core</artifactId>  
+		    <version>${spring.version}</version>  
+		</dependency>  
+		  
+		<dependency>  
+		    <groupId>org.springframework</groupId>  
+		    <artifactId>spring-test</artifactId>  
+		    <version>${spring.version}</version>  
+		</dependency>  
+	    
+	    <!-- hibernate -->
+        <dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+	        <version>${hibernate.version}</version>
+        </dependency>
+	  
+        
+        <!-- web -->
+	    <dependency>
+			<groupId>com.xhc.test</groupId>
+			<artifactId>test_jquery</artifactId>
+			<version>test_jquery</version>
+			<type>war</type>
+	    </dependency>
+	   
+	    <dependency>
+	      <groupId>junit</groupId>
+	      <artifactId>junit</artifactId>
+	      <version>3.8.1</version>
+	      <scope>test</scope>
+	    </dependency>
+    
+    </dependencies>
+  
+  <build>
+    <finalName>test_sh</finalName>
+  </build>
+</project>
