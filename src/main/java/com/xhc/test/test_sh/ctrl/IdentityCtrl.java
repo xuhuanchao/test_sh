@@ -11,15 +11,14 @@ public class IdentityCtrl implements IIdentityCtrl {
 
     
     @RequestMapping("login") //用来处理前台的login请求  
-    public @ResponseBody String hello(  
+    @ResponseBody
+    @Override
+    public String hello(  
             @RequestParam(value = "username", required = false)String username,  
             @RequestParam(value = "password", required = false)String password  
             ){  
         return "Hello "+username+",Your password is: "+password;  
     } 
     
-    @ResponseBody
-    public String identity() {
-        return "saf";
-    }
+
 }
