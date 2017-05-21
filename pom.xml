@@ -17,9 +17,17 @@
 		<com.xhc.test.version>0.0.1-SNAPSHOT</com.xhc.test.version>
 		<spring.version>4.3.8.RELEASE</spring.version>
 		<hibernate.version>5.2.10.Final</hibernate.version>
+		<mysql.version>6.0.6</mysql.version>
 	</properties>
 
 	<dependencies>
+
+		<!-- database -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.version}</version>
+		</dependency>
 
 		<!-- spring -->
 		<dependency>
