@@ -16,7 +16,7 @@
 	<properties>
 		<com.xhc.test.version>0.0.1-SNAPSHOT</com.xhc.test.version>
 		<spring.version>4.3.8.RELEASE</spring.version>
-		<hibernate.version>5.2.10.Final</hibernate.version>
+		<hibernate.version>4.3.11.Final</hibernate.version>
 		<mysql.version>6.0.6</mysql.version>
 	</properties>
 
@@ -40,6 +40,12 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
 			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-orm</artifactId>
+		    <version>${spring.version}</version>
 		</dependency>
 
 		<dependency>
@@ -75,12 +81,12 @@
 
 
 		<!-- web -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.xhc.test</groupId>
 			<artifactId>test_jquery</artifactId>
 			<version>${com.xhc.test.version}</version>
 			<type>war</type>
-		</dependency>
+		</dependency> -->
 
 		<dependency>
 			<groupId>junit</groupId>
