@@ -194,14 +194,11 @@ public class Student implements java.io.Serializable {
 	public String getClassname() {
 		return this.classname;
 	}
+
+    public void setClassname(String classname) {
+        this.classname = classname;
+    }
 	
-	/**
-	 * 设置.
-	 *
-	 * @param class 
-	 */
-	public void setClass(String classname) {
-		this.classname = classname;
-	}
+	
 	
 }

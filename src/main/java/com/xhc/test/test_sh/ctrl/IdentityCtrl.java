@@ -4,13 +4,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("indentity")
 public class IdentityCtrl implements IIdentityCtrl {
 
     
-    @RequestMapping("login") //用来处理前台的login请求  
+    @RequestMapping("indentity/login") //用来处理前台的login请求  
     @ResponseBody
     @Override
     public String hello(  
@@ -20,5 +20,10 @@ public class IdentityCtrl implements IIdentityCtrl {
         return "Hello "+username+",Your password is: "+password;  
     } 
     
-
+    @RequestMapping("index")
+    public ModelAndView index() {
+        ModelAndView modelAndView = new ModelAndView();  
+        modelAndView.setViewName("student");
+        return modelAndView;
+    }
 }

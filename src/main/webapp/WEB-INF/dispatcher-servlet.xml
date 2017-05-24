@@ -2,12 +2,15 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans  
-            http://www.springframework.org/schema/beans/spring-beans.xsd  
+            http://www.springframework.org/schema/beans/spring-beans-4.0.xsd  
             http://www.springframework.org/schema/mvc  
-            http://www.springframework.org/schema/mvc/spring-mvc.xsd  
+            http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd  
             http://www.springframework.org/schema/context  
-            http://www.springframework.org/schema/context/spring-context.xsd"
+            http://www.springframework.org/schema/context/spring-context-4.0.xsd
+            http://www.springframework.org/schema/tx
+            http://www.springframework.org/schema/tx/spring-tx-4.0.xsd "
 	default-lazy-init="true">
 	<!-- 配置文件属性替换 -->
 	<bean id="propertyConfigurer"
@@ -34,19 +37,21 @@
 	<!-- 添加注解驱动 -->
 	<mvc:annotation-driven />
 	<!-- 默认扫描的包路径 -->
-	<context:component-scan base-package="com.xhc.test.test_sh" />
+	<context:component-scan base-package="com.xhc.test.test_sh.ctrl" />
 
 	<!-- mvc:view-controller可以在不需要Controller处理request的情况，转向到设置的View -->
 	<!-- 像下面这样设置，如果请求为/，则不通过controller，而直接解析为/index.jsp -->
-	<mvc:view-controller path="/" view-name="index" />
+	<!-- <mvc:view-controller path="/" view-name="index" /> -->
 
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+	<!-- <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">
-		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost/test" />
-		<property name="username" value="root"></property>
-		<property name="password" value="281889"></property>
-	</bean>
+		<property name="driverClassName" value="${db.driverclass}" />
+		<property name="url" value="${db.url}" />
+		<property name="username" value="${db.username}"></property>
+		<property name="password" value="${db.password]"></property>
+		<property name="initialSize" value="10"></property>
+		<property name="maxActive" value="30"></property>
+	</bean> -->
 	
 	
 	<!-- <bean id="sessionFactory"
@@ -60,94 +65,6 @@
 	</bean> -->
 
 	<!-- Hibernate SessionFactory -->
-	<bean id="sessionFactory"
-		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
-		<!-- 用于定义资源加载器,用于加载上下资源,可在此处加入自定义的加载器来对载入的PO类进行改造,注:可能有对应的版本支持,在Spring升级后可以无法使用,需要进行测试! -->
-		<property name="dataSource">
-			<ref bean="dataSource" />
-		</property>
-		<property name="hibernateProperties">
-			<props>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</prop>
-				<!-- <prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop> -->  
-                <!-- 其实这个参数的作用主要用于：自动创建|更新|验证数据库表结构。如果不是此方面的需求建议set value="none".  
-					 其它几个参数的意思，我解释一下：  
-					validate               加载hibernate时，验证创建数据库表结构  
-					create                  每次加载hibernate，重新创建数据库表结构，这就是导致数据库表数据丢失的原因。  
-					create-drop        加载hibernate时创建，退出是删除表结构  
-					update                 加载hibernate自动更新数据库结构 
-				-->  
-                <prop key="hibernate.hbm2ddl.auto">none</prop>   
-                <!-- 是否显示sql语句 -->  
-                <prop key="hibernate.show_sql">true</prop>  
-                <prop key="hiberante.format_sql">true</prop>  
-			</props>
-		</property>
-		<!-- <property name="configLocations">  
-            <list>  
-                <value>  
-                读取和实体相关的xml  
-                    classpath*:com/tgb/web/controller/hibernate/hibernate.cfg.test.xml  
-                </value>  
-            </list>  
-        </property> -->  
-		<property name="packagesToScan">
-			<list>
-				<value>com.xhc.test.test_sh.entity</value>
-			</list>
-		</property>
-	</bean>
-
-    <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
-        <property name="sessionFactory">
-            <ref local="sessionFactory" />
-	    </property>
-    </bean>
-     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-		<property name="dataSource" ref="dataSource" />
-		<property name="maxRows" value="10000" />
-    </bean>
-	<bean id="namedParameterJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
-        <constructor-arg ref="jdbcTemplate" />
-	</bean>
-	<bean id="simpleJdbcCall" class="org.springframework.jdbc.core.simple.SimpleJdbcCall">
-        <constructor-arg ref="jdbcTemplate" />
-	</bean>
-	<bean id="simpleJdbcInsert" class="org.springframework.jdbc.core.simple.SimpleJdbcInsert">
-        <constructor-arg ref="jdbcTemplate" />
-	</bean>
-    
-    
-    <!-- 事务管理 -->
-	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory" />
-	</bean>
-    <!-- 事务拦截器 -->
-    <bean id="transactionInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor">
-		<!-- 注入事务 -->
-		<property name="transactionManager">
-		  <ref bean="transactionManager" />
-		</property>
-		<!-- 配置事务属性 -->
-		<property name="transactionAttributes">
-            <props>
-				<!-- 以下方法开头需要事务 -->
-				<prop key="*">PROPAGATION_REQUIRED,-Exception</prop>
-            </props>
-		</property>
-    </bean>
-    
-    <bean id="preformanceThresholdProxyCreator" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
-		<property name="beanNames">
-			<list>
-                <value>*biz</value>
-			</list>
-		</property>
-        <property name="interceptorNames">
-            <value>transactionInterceptor</value>
-        </property>
-    </bean>   
-    
 
     <!-- 通过mvc:resources设置静态资源，这样servlet就会处理这些静态资源，而不通过控制器 -->
     <!-- 设置不过滤内容，比如:css,jquery,img 等资源文件 -->
@@ -155,10 +72,10 @@
     <mvc:resources location="/css/*" mapping="/css/**" />
     <mvc:resources location="/js/*" mapping="/js/**" />
     <mvc:resources location="/images/*" mapping="/images/**" />
+
     
 	<bean class="org.springframework.web.servlet.view.UrlBasedViewResolver">
-		<property name="viewClass"
-			value="org.springframework.web.servlet.view.JstlView"></property>
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
 		<!-- 配置jsp路径前缀 -->
 		<property name="prefix" value="/"></property>
 		<!-- 配置URl后缀 -->

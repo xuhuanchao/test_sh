@@ -6,9 +6,9 @@ import java.util.Map;
 public interface IBaseDao {
 
     
-    public List<Map<String, Object>> queryByHql(String hql) throws Exception;
+    public List queryByHql(String hql, Map<String, Object> params) throws Exception;
     
-    public List<Map<String, Object>> queryBySql(String sql) throws Exception;
+    public List queryBySql(String sql, Map<String, Object> params) throws Exception;
     
     public void add(Map<String, Object> entity) throws Exception;
     

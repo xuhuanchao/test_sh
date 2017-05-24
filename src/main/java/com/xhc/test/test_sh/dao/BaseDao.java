@@ -12,10 +12,13 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.orm.hibernate4.HibernateTemplate;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class BaseDao implements IBaseDao {
     
     @Autowired
+    @Qualifier("hibernateTemplate")
     HibernateTemplate hibernateTemplate;
     
     @Autowired
@@ -23,26 +26,34 @@ public class BaseDao implements IBaseDao {
     NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Autowired
+    @Qualifier("simpleJdbcCall")
     SimpleJdbcCall simpleJdbcCall;
     
     @Autowired
+    @Qualifier("simpleJdbcInsert")
     SimpleJdbcInsert simpleJdbcInsert;
     
     
     public Session getSession(){
-        return hibernateTemplate.getSessionFactory().getCurrentSession();
+        return hibernateTemplate.getSessionFactory().openSession();
     }
 
     @Override
-    public List<Map<String, Object>> queryByHql(String hql)  throws Exception {
-        Query query = getSession().createQuery(hql);
-        return query.list();
+    public List queryByHql(String hql, Map<String, Object> params)  throws Exception {
+        Session session = getSession();
+        session.beginTransaction();
+        Query query = session.createQuery(hql);
+        query.setProperties(params);
+        List list = query.list();
+        session.close();
+        return list;
     }
 
     
     @Override
-    public List<Map<String, Object>> queryBySql(String sql) throws Exception {
+    public List queryBySql(String sql, Map<String, Object> params) throws Exception {
         SQLQuery sqlQuery = getSession().createSQLQuery(sql);
+        sqlQuery.setProperties(params);
         return sqlQuery.list();
     }
 
