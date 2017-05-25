@@ -21,6 +21,11 @@ public class StudentBiz implements IStudentBiz {
     public List<Student> queryByName(String name) throws Exception {
         return studentDao.queryByName(name);
     }
+
+    @Override
+    public List<Student> queryStudent(Map<String, Object> params) throws Exception {
+        return studentDao.queryStuden(params);
+    }
     
     
 }

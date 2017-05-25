@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -35,9 +36,15 @@ public class StudentCtrl implements IStudentCtrl {
         return JSONArray.fromObject(list).toString();
     }
 
-    
-    
-
+    @Override
+    @ResponseBody
+    @RequestMapping(value="queryStudent" , produces = "application/json; charset=UTF-8")
+    public Map<String, Object> queryStudent(@RequestParam Map<String, Object> params ) throws Exception {
+        Map<String, Object> result = new HashMap<String, Object>(); 
+        List<Student> students = studentBiz.queryStudent(params);
+        result.put("data", students);
+        return result;
+    }
     
     
 }

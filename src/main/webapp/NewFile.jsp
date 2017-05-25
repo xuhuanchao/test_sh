@@ -9,20 +9,7 @@
 </head>  
 <body>  
     <h2>Hello World!</h2>  
-      
-    <form action="student/list">  
-        <table>
-            <tr>
-                <td>用户名：</td>
-                <td><input id="username" name="username" type="text"></input></td>
-            </tr>
-            <tr>
-                <td>密  码：</td>
-                <td><input id="username" name="password" type="password"></input></td>
-            </tr>
-        </table>
-        <input type="submit">  
-    </form>  
+    
     <span>当前IP：<%=request.getRemoteAddr() %></span>  
 </body>  
 </html>  

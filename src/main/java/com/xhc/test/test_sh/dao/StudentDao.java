@@ -1,5 +1,6 @@
 package com.xhc.test.test_sh.dao;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,31 @@ public class StudentDao extends BaseDao implements IStudentDao {
         sb.append("from Student where name =:name");
         p.put("name", name);
         return super.queryByHql(sb.toString(), p);
+    }
+
+    
+    @Override
+    public List<Student> queryStuden(Map<String, Object> params) throws Exception {
+        List names = new ArrayList();
+        List values = new ArrayList();
+        StringBuffer sb = new StringBuffer();
+        sb.append("from Student where 1=1 ");
+        if(!StringUtils.isEmpty(params.get("name"))){
+            sb.append(" and name like '%"+params.get("name")+"%'");
+        }
+        if(!StringUtils.isEmpty(params.get("age"))){
+            sb.append(" and name age = "+params.get("age"));
+        }
+        if(!StringUtils.isEmpty(params.get("address"))){
+            sb.append(" and name address like '%"+params.get("address") + "%'");
+        }
+        if(!StringUtils.isEmpty(params.get("hobby"))){
+            sb.append(" and name hobby like '%"+params.get("hobby") + "%'");
+        }
+        if(!StringUtils.isEmpty(params.get("classname"))){
+            sb.append(" and name hobby classname '%"+params.get("classname") + "%'");
+        }
+        return (List<Student>)hibernateTemplate.find(sb.toString());
     }
     
 

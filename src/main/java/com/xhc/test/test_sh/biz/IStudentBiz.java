@@ -9,4 +9,6 @@ public interface IStudentBiz {
 
     
     public List<Student> queryByName(String name) throws Exception;
+    
+    public List<Student> queryStudent(Map<String, Object> params) throws Exception;
 }
