@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+            http://www.springframework.org/schema/beans/spring-beans-4.0.xsd  
+            http://www.springframework.org/schema/mvc  
+            http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd  
+            http://www.springframework.org/schema/context  
+            http://www.springframework.org/schema/context/spring-context-4.0.xsd
+            http://www.springframework.org/schema/tx
+            http://www.springframework.org/schema/tx/spring-tx-4.0.xsd "
+	>
+	<!-- 配置文件属性替换 -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:db.properties</value>
+			</list>
+		</property>
+		<property name="systemPropertiesModeName">
+			<value>SYSTEM_PROPERTIES_MODE_OVERRIDE</value>
+		</property>
+		<property name="searchSystemEnvironment">
+			<value>true</value>
+		</property>
+		<property name="ignoreUnresolvablePlaceholders">
+			<value>false</value>
+		</property>
+	</bean>
+
+	<!-- 添加注解驱动 -->
+	<mvc:annotation-driven />
+	
+	<!-- 默认扫描的包路径 -->
+	<context:component-scan base-package="com.xhc.test.test_sh.biz, com.xhc.test.test_sh.dao " />
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverclass}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+		
+		<!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="${jdbc.initialSize}"/>
+        <property name="minIdle" value="${jdbc.minIdle}"/>
+        <property name="maxActive" value="${jdbc.maxActive}"/>
+
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="${jdbc.maxWait}"/>
+
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="${jdbc.timeBetweenEvictionRunsMillis}"/>
+
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="${jdbc.minEvictableIdleTimeMillis}"/>
+
+        <!-- 
+	        <property name="validationQuery" value="SELECT 'x' from dual"/>
+	        <property name="testWhileIdle" value="true"/>  空闲时是否进行验证，检查对象是否有效，默认为false 
+	        <property name="testOnBorrow" value="false"/>  取得对象时是否进行验证，检查对象是否有效，默认为false 
+	        <property name="testOnReturn" value="false"/>  返回对象时是否进行验证，检查对象是否有效，默认为false 
+	        <property name="poolPreparedStatements" value="true"/>  开启池的prepared
+        -->
+	</bean>
+	
+
+	<!-- Hibernate SessionFactory -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+                <!-- <prop key="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</prop> -->
+				<prop key="hibernate.dialect">org.hibernate.dialect.Oracle9Dialect</prop>
+                <!-- 是否显示sql语句 -->  
+                <prop key="hibernate.show_sql">true</prop>  
+                <prop key="hiberante.format_sql">true</prop>  
+                <!-- 是否开启二级缓存 -->
+                <prop key="hibernate.cache.use_second_level_cache">false</prop>
+                <!-- 是否开启查询缓存 -->
+                <prop key="hibernate.cache.use_query_cache">false</prop>
+                <!-- 数据库批量查询最大数 -->
+                <prop key="hibernate.jdbc.fetch_size">50</prop>
+                <!-- 数据库批量更新、添加、删除操作最大数 -->
+                <prop key="hibernate.jdbc.batch_size">50</prop>
+                <!-- 是否自动提交事务 -->
+                <prop key="hibernate.connection.autocommit">true</prop>
+                <!-- 指定hibernate在何时释放JDBC连接 -->
+                <prop key="hibernate.connection.release_mode">auto</prop>
+                
+                <!-- 
+                <prop key="hibernate.hbm2ddl.auto">update | create | create-drop</prop> 创建sessionFactory 后更新、创建库，关闭后删除库
+                <prop key="hibernate.default_schema">SCHEMA_NAME</prop> 生成sql的schema
+                 -->
+			</props>
+		</property>
+		<!-- 
+		读取和实体相关的xml  
+		<property name="configLocations">  
+            <list>  
+                <value>  
+                    classpath*:com/tgb/web/controller/hibernate/hibernate.cfg.test.xml  
+                </value>  
+            </list>  
+        </property> 
+        -->  
+		<property name="packagesToScan">
+			<list>
+				<value>com.xhc.test.test_sh.entity</value>
+			</list>
+		</property>
+	</bean>
+
+    <!-- 事务管理 -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+    
+    <!-- 事物拦截器 -->
+    <bean id="transactionInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor">
+        <property name="transactionManager">
+          <ref bean="transactionManager" />
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="*">PROPAGATION_REQUIRED,-Exception</prop>
+                <!-- <prop key="delete*">PROPAGATION_REQUIRED</prop> 
+				<prop key="add*">PROPAGATION_REQUIRED</prop> 
+				<prop key="update*">PROPAGATION_REQUIRED</prop> 
+				<prop key="save*">PROPAGATION_REQUIRED</prop> 
+                <prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>  -->
+            </props>
+        </property>
+    </bean>
+    
+    <bean id="preformanceThresholdProxyCreator" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+        <property name="beanNames">
+            <list>
+                <value>*Ctrl</value>
+            </list>
+        </property>
+        <property name="interceptorNames">
+            <value>transactionInterceptor</value>
+        </property>
+    </bean>    
+
+    <!-- 事物通知 -->
+    <!-- <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="create*" propagation="REQUIRED" />
+            <tx:method name="save*" propagation="REQUIRED" />
+            <tx:method name="add*" propagation="REQUIRED" />
+            <tx:method name="update*" propagation="REQUIRED" />
+            <tx:method name="remove*" propagation="REQUIRED" />
+            <tx:method name="del*" propagation="REQUIRED" />
+            <tx:method name="import*" propagation="REQUIRED" />
+            <tx:method name="*" propagation="NOT_SUPPORTED" read-only="true" />
+        </tx:attributes>
+    </tx:advice> -->
+
+    <!-- 切点 aspectJ -->
+    <!-- <aop:config>
+        <aop:pointcut id="serviceOperation" expression="execution(* *..*ctrl*..*(..))" />
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceOperation" />
+    </aop:config> -->
+
+    
+    
+    <bean id="hibernateTemplate" class="org.springframework.orm.hibernate4.HibernateTemplate">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory" />
+	    </property>
+    </bean>
+     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource" />
+		<property name="maxRows" value="10000" />
+    </bean>
+	<bean id="namedParameterJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+        <constructor-arg ref="jdbcTemplate" />
+	</bean>
+	<bean id="simpleJdbcCall" class="org.springframework.jdbc.core.simple.SimpleJdbcCall">
+        <constructor-arg ref="jdbcTemplate" />
+	</bean>
+	<bean id="simpleJdbcInsert" class="org.springframework.jdbc.core.simple.SimpleJdbcInsert">
+        <constructor-arg ref="jdbcTemplate" />
+	</bean>
+    
+    
+</beans>
