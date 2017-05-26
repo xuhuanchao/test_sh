@@ -8,7 +8,7 @@ $(function() {
 	//获取表单数据
 	function getFormData(formid) {
 		var result = {};
-		var array =$(formid).serializeArray();
+		var array =$("#"+formid).serializeArray();
 	    $.each(array, function(i, field){
 	    	result[field.name] = field.value;
 	    });
@@ -35,14 +35,15 @@ $(function() {
 	});
 	
 	$("#queryStudentBtn").click(function(){
-		queryStudent(getFormData("studentInfoForm"));
+		queryStudent(getFormData("studentQueryForm"));
 	});
 	
 	function queryStudent(params){
+		alert(JSON.stringify(params));
 		$.ajax({
-			url : service.queryStudent,
-			data : {'params' : params},
-			contentType: "application/json",
+			url : service.queryStudent,  //basepath + "/student/queryByName",
+			data : JSON.stringify(params),
+			contentType: "application/json; charset=UTF-8",
 			dataType : 'json',
 			type : 'post',
 			headers : {

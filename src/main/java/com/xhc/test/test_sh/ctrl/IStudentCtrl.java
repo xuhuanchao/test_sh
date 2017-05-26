@@ -11,5 +11,5 @@ public interface IStudentCtrl {
     
     public String queryByName(String name) throws Exception;
     
-    public Map<String, Object> queryStudent(Map<String, Object> params ) throws Exception;
+    public Map queryStudent(Map<String, Object> params ) throws Exception;
 }

@@ -15,7 +15,7 @@
 </head>
 <body>
     
-    <form action="student/queryByName">
+    <form action="student/queryByName" method="post" enctype="application/x-www-form-urlencoded">
         <input type="text" name="name"></input>
         <input type="submit"></input>
     </form>

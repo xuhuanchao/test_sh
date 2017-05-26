@@ -45,16 +45,16 @@ public class StudentDao extends BaseDao implements IStudentDao {
             sb.append(" and name like '%"+params.get("name")+"%'");
         }
         if(!StringUtils.isEmpty(params.get("age"))){
-            sb.append(" and name age = "+params.get("age"));
+            sb.append(" and age = "+params.get("age"));
         }
         if(!StringUtils.isEmpty(params.get("address"))){
-            sb.append(" and name address like '%"+params.get("address") + "%'");
+            sb.append(" and address like '%"+params.get("address") + "%'");
         }
         if(!StringUtils.isEmpty(params.get("hobby"))){
-            sb.append(" and name hobby like '%"+params.get("hobby") + "%'");
+            sb.append(" and hobby like '%"+params.get("hobby") + "%'");
         }
         if(!StringUtils.isEmpty(params.get("classname"))){
-            sb.append(" and name hobby classname '%"+params.get("classname") + "%'");
+            sb.append(" and hobby classname '%"+params.get("classname") + "%'");
         }
         return (List<Student>)hibernateTemplate.find(sb.toString());
     }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +20,7 @@ import com.xhc.test.test_sh.biz.IStudentBiz;
 import com.xhc.test.test_sh.entity.Student;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Controller 
 @RequestMapping("student")
@@ -38,8 +40,8 @@ public class StudentCtrl implements IStudentCtrl {
 
     @Override
     @ResponseBody
-    @RequestMapping(value="queryStudent" , produces = "application/json; charset=UTF-8")
-    public Map<String, Object> queryStudent(@RequestParam Map<String, Object> params ) throws Exception {
+    @RequestMapping(value="queryStudent" )
+    public Map queryStudent(@RequestBody Map<String, Object> params ) throws Exception {
         Map<String, Object> result = new HashMap<String, Object>(); 
         List<Student> students = studentBiz.queryStudent(params);
         result.put("data", students);
