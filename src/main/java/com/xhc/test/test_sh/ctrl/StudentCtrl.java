@@ -4,12 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -48,5 +48,18 @@ public class StudentCtrl implements IStudentCtrl {
         return result;
     }
     
+    @ResponseBody
+    @RequestMapping(value="addStudent")
     
+    public Map<String, Object> addStudent(@RequestBody Student student) throws Exception {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            studentBiz.addStudent(student);
+            result.put("result", true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("result", false);
+        }
+        return result;
+    }
 }

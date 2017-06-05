@@ -11,4 +11,6 @@ public interface IStudentDao {
     
     
     public List<Student> queryStuden(Map<String, Object> params) throws Exception;
+    
+    public void addStudent(Student student) throws Exception ;
 }

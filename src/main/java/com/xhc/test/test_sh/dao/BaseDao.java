@@ -3,6 +3,7 @@ package com.xhc.test.test_sh.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.FlushMode;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -59,6 +60,7 @@ public class BaseDao implements IBaseDao {
 
     @Override
     public void add(Map<String, Object> entity) throws Exception {
+        hibernateTemplate.getSessionFactory().getCurrentSession().setFlushMode(FlushMode.AUTO);
         hibernateTemplate.save(entity);
     }
 

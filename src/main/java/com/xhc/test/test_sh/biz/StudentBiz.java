@@ -6,6 +6,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.xhc.test.test_sh.dao.IStudentDao;
 import com.xhc.test.test_sh.entity.Student;
@@ -27,5 +29,10 @@ public class StudentBiz implements IStudentBiz {
         return studentDao.queryStuden(params);
     }
     
+    @Override
     
+    public void addStudent(Student student) throws Exception {
+        studentDao.addStudent(student);
+        throw new Exception("aaaa");
+    }
 }

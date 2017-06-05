@@ -19,6 +19,7 @@
 		<hibernate.version>4.3.11.Final</hibernate.version>
 		<mysql.version>5.1.42</mysql.version>
 		<oracle.version>10.2.0.4.0</oracle.version>
+		<com.xhc.test.testjquery.version>0.0.1-SNAPSHOT</com.xhc.test.testjquery.version>
 	</properties>
 
 	<dependencies>
@@ -123,12 +124,12 @@
 
 
 		<!-- web -->
-		<!-- <dependency>
+		<dependency>
 			<groupId>com.xhc.test</groupId>
 			<artifactId>test_jquery</artifactId>
 			<version>${com.xhc.test.version}</version>
 			<type>war</type>
-		</dependency> -->
+		</dependency>
 
 		<dependency>
 			<groupId>junit</groupId>
@@ -139,7 +140,27 @@
 
 	</dependencies>
 
+    
+
+
+
 	<build>
-		<finalName>test_sh</finalName>
+	    <finalName>test_sh</finalName>
+	    
+	    <plugins>
+		    <plugin>  
+		        <groupId>org.apache.maven.plugins</groupId>  
+		        <artifactId>maven-war-plugin</artifactId>  
+		        <version>2.6</version>  
+		        <configuration>  
+		            <overlays>  
+		                <overlay>  
+		                    <groupId>com.xhc.test</groupId>
+		                    <artifactId>test_jquery</artifactId>
+		                </overlay>  
+		            </overlays>
+		        </configuration>
+            </plugin> 
+	    </plugins>
 	</build>
 </project>

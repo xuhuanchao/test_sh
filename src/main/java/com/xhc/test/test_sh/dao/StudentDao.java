@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+import org.hibernate.FlushMode;
 import org.hibernate.Query;
-import org.hibernate.transform.ResultTransformer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import com.xhc.test.test_sh.biz.IStudentBiz;
 import com.xhc.test.test_sh.entity.Student;
 
 @Repository
@@ -25,6 +25,7 @@ public class StudentDao extends BaseDao implements IStudentDao {
         return query.list();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<Student> queryByName(String name) throws Exception {
         StringBuffer sb = new StringBuffer();
@@ -37,8 +38,6 @@ public class StudentDao extends BaseDao implements IStudentDao {
     
     @Override
     public List<Student> queryStuden(Map<String, Object> params) throws Exception {
-        List names = new ArrayList();
-        List values = new ArrayList();
         StringBuffer sb = new StringBuffer();
         sb.append("from Student where 1=1 ");
         if(!StringUtils.isEmpty(params.get("name"))){
@@ -59,5 +58,10 @@ public class StudentDao extends BaseDao implements IStudentDao {
         return (List<Student>)hibernateTemplate.find(sb.toString());
     }
     
+    
+    public void addStudent(Student student) throws Exception {
+        student.setId(UUID.randomUUID().toString());
+        hibernateTemplate.save(student);
+    }
 
 }
