@@ -50,7 +50,6 @@ public class StudentCtrl implements IStudentCtrl {
     
     @ResponseBody
     @RequestMapping(value="addStudent")
-    
     public Map<String, Object> addStudent(@RequestBody Student student) throws Exception {
         Map<String, Object> result = new HashMap<>();
         try {

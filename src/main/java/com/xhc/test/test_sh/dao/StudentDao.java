@@ -1,25 +1,22 @@
 package com.xhc.test.test_sh.dao;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.hibernate.FlushMode;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestBody;
 
+import com.xhc.test.test_sh.base.BaseDao;
+import com.xhc.test.test_sh.base.QueryInfo;
 import com.xhc.test.test_sh.entity.Student;
 
 @Repository
-public class StudentDao extends BaseDao implements IStudentDao {
+public class StudentDao extends BaseDao<Student> implements IStudentDao {
 
-    
-    
+
     public List<Student> getStudentByHql(String hql) {
         Query query = super.getSession().createQuery(hql);
         return query.list();
@@ -37,7 +34,7 @@ public class StudentDao extends BaseDao implements IStudentDao {
 
     
     @Override
-    public List<Student> queryStuden(Map<String, Object> params) throws Exception {
+    public List<Student> queryStudent(Map<String, Object> params) throws Exception {
         StringBuffer sb = new StringBuffer();
         sb.append("from Student where 1=1 ");
         if(!StringUtils.isEmpty(params.get("name"))){
@@ -55,13 +52,21 @@ public class StudentDao extends BaseDao implements IStudentDao {
         if(!StringUtils.isEmpty(params.get("classname"))){
             sb.append(" and hobby classname '%"+params.get("classname") + "%'");
         }
-        return (List<Student>)hibernateTemplate.find(sb.toString());
+        return (List<Student>) getHibernateTemplate().find(sb.toString());
     }
     
     
     public void addStudent(Student student) throws Exception {
         student.setId(UUID.randomUUID().toString());
-        hibernateTemplate.save(student);
+        getHibernateTemplate().save(student);
     }
 
+    @Override
+    public List<Student> queryStudent(QueryInfo queryInfo) throws Exception {
+        return super.queryByQueryInfo(queryInfo);
+    }
+
+
+    
+    
 }

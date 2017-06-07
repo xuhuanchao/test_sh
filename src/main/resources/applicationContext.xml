@@ -141,7 +141,7 @@
         </property>
     </bean> -->
     
-    <bean id="preformanceThresholdProxyCreator" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+    <!-- <bean id="preformanceThresholdProxyCreator" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
         <property name="beanNames">
             <list>
                 <value>*Biz</value>
@@ -150,10 +150,10 @@
         <property name="interceptorNames">
             <value>transactionInterceptor</value>
         </property>
-    </bean>
+    </bean> -->
 
     <!-- 事物通知 -->
-    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+    <!-- <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
             <tx:method name="create*" propagation="REQUIRED" />
             <tx:method name="save*" propagation="REQUIRED" />
@@ -164,7 +164,7 @@
             <tx:method name="import*" propagation="REQUIRED" />
             <tx:method name="*" propagation="NOT_SUPPORTED" read-only="true" />
         </tx:attributes>
-    </tx:advice>
+    </tx:advice> -->
 
     <!-- 切点 aspectJ -->
     <!-- <aop:config>
