@@ -13,4 +13,9 @@ public interface IStudentBiz {
     public List<Student> queryStudent(Map<String, Object> params) throws Exception;
     
     public void addStudent(Student student) throws Exception;
+    
+    public Student updateStudent(Student student) throws Exception;
+    
+    public void clearCache() throws Exception;
+    
 }

@@ -6,10 +6,12 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.xhc.test.test_sh.base.QueryInfo;
 import com.xhc.test.test_sh.base.SqlConditionsEnum;
@@ -24,11 +26,14 @@ public class StudentBiz implements IStudentBiz {
     IStudentDao studentDao;
 
     @Override
+    @Cacheable(value="student", key="#name")
+    @Transactional
     public List<Student> queryByName(String name) throws Exception {
         return studentDao.queryByName(name);
     }
 
     @Override
+    @Cacheable(value="student" ,key="#params.get('name').concat(#params.get('age'))")
     public List<Student> queryStudent(Map<String, Object> params) throws Exception {
         QueryInfo queryInfo = new QueryInfo();
         Map<String, SqlConditionsEnum> paramConditions = new HashMap<String, SqlConditionsEnum>();
@@ -46,9 +51,22 @@ public class StudentBiz implements IStudentBiz {
     }
     
     @Override
-    
     public void addStudent(Student student) throws Exception {
         studentDao.addStudent(student);
-        throw new Exception("aaaa");
     }
+
+    @Override
+    @CachePut(value="student", key="#student.getName().concat(#student.getId())")
+    public Student updateStudent(Student student) throws Exception {
+        return studentDao.updateStudent(student);
+    }
+
+    @Override
+    @CacheEvict(value="student", allEntries=true)
+    public void clearCache() throws Exception {
+        
+    }
+    
+    
+    
 }

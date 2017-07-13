@@ -58,7 +58,7 @@ public class StudentDao extends BaseDao<Student> implements IStudentDao {
     
     public void addStudent(Student student) throws Exception {
         student.setId(UUID.randomUUID().toString());
-        getHibernateTemplate().save(student);
+        super.add(student);
     }
 
     @Override
@@ -66,7 +66,11 @@ public class StudentDao extends BaseDao<Student> implements IStudentDao {
         return super.queryByQueryInfo(queryInfo);
     }
 
-
+    @Override
+    public Student updateStudent(Student student) throws Exception {
+        super.saveOrUpdate(student);
+        return student;
+    }
     
     
 }

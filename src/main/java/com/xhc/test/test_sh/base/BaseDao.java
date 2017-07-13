@@ -60,11 +60,11 @@ public class BaseDao<T> implements IBaseDao<T> {
     @Override
     public List<T> queryByHql(String hql, Map<String, Object> params)  throws Exception {
         Session session = getSession();
-        session.beginTransaction();
+//        session.beginTransaction();
         Query query = session.createQuery(hql);
         query.setProperties(params);
         List list = query.list();
-        session.close();
+//        session.close();
         return list;
     }
 

@@ -37,11 +37,22 @@ public class StudentCtrl implements IStudentCtrl {
         List list = studentBiz.queryByName(name);
         return JSONArray.fromObject(list).toString();
     }
+    
+
+    @Override
+    @ResponseBody
+    @RequestMapping(value="getByName")
+    public List<Student> getByName(@RequestParam(value="name")String name) throws Exception {
+        return studentBiz.queryByName(name);
+    }
+
+
+
 
     @Override
     @ResponseBody
     @RequestMapping(value="queryStudent" )
-    public Map queryStudent(@RequestBody Map<String, Object> params ) throws Exception {
+    public Map queryStudent(@RequestParam Map<String, Object> params ) throws Exception {
         Map<String, Object> result = new HashMap<String, Object>(); 
         List<Student> students = studentBiz.queryStudent(params);
         result.put("data", students);
